@@ -1,0 +1,9 @@
+[Unit]
+Description=Discord Hello
+
+[Service]
+Type=simple
+User=dbots
+Restart=always
+WorkingDirectory=/home/dbots/discord_hello_bot
+ExecStart=/home/dbots/discord_hello_bot/hello.bash
