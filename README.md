@@ -16,7 +16,7 @@ Visit the URL
     
 but replace XXXX with your app client ID. Choose the server you want to add it to and select authorize.
 
-# Create python environemnt to run bot
+# Create python environemnt to run bot (first time)
 
     virtualenv -p python3 venv
     source venv/bin/activate
@@ -25,6 +25,7 @@ but replace XXXX with your app client ID. Choose the server you want to add it t
 
 then later:
 
+    source venv/bin/activate
     pip install -r requirements.txt
 
 
@@ -42,6 +43,9 @@ to
 Another Note: I also pulled the token into an environment variable so I can share the source in git.
 
     chmod +x hello.py
+
+# Setup somewhere to run the bot
+[Spin up a digital ocean droplet](DO.md)
 
 # Also see:
 [Discord Docs](https://discordpy.readthedocs.io)
