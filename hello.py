@@ -25,9 +25,9 @@ async def on_message(message):
 
     if message.content.startswith('!help'):
         msg = '''
-echo - repeat what was typed
-hello - replies with 'hello <username>'
-help - provide some assistance with commands
+!echo - repeat what was typed
+!hello - replies with 'hello <username>'
+!help - this page
 '''
         await message.channel.send(msg)
 

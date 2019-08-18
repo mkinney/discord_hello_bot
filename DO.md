@@ -33,3 +33,10 @@
     systemctl daemon-reload
     systemctl start discord_hello.service
     systemctl enable discord_hello.service
+
+# Updating (get updates)
+    su - dbots
+    cd discord_hello_bot
+    git pull
+    exit
+    systemctl restart discord_hello.service
