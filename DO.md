@@ -8,19 +8,28 @@
     useradd -m -s /bin/bash dbots
     passwd dbots
     su - dbots
-    vi .bashrc (and add the environment variable)
+    vi .env (and add the export DISCORD_HELLO_TOKEN='xxx' line)
+    vi .bashrc (and add 'source ./.env' to the end)
     git clone <thisrepo>
     cd discord_hello_bot
     source venv/bin/activate
     pip install -r requirements.txt
-    ./hello.py
    
-# Test that the bot responds in discord
+# Test that the bot responds in discord using python script
+
+    ./hello.py
 
 # Kill the hello.py script by pressing ^C twice
 
-# Create discord_hello service
+# Test that the bot responds in discord using bash script
 
-    cp discord_hello /etc/systemd/system/discord_hello
+    ./hello.bash
+
+# Kill the hello.bash script by pressing ^C twice
+
+# Create discord_hello.service (as root)
+
+    cp discord_hello.service /etc/systemd/system/discord_hello.service
     systemctl daemon-reload
-    systemctl enable discord_hello
+    systemctl start discord_hello.service
+    systemctl enable discord_hello.service
