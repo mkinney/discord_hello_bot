@@ -10,12 +10,25 @@ client = discord.Client()
 
 @client.event
 async def on_message(message):
-    # we do not want the bot to reply to itself
+
+    # Do not want the bot to reply to itself
     if message.author == client.user:
         return
 
+    # Not sure if this opens up some exploits. Feels unsafe.
+    if message.content.startswith('!echo'):
+        await message.channel.send(message.content)
+
     if message.content.startswith('!hello'):
         msg = 'Hello {0.author.mention}'.format(message)
+        await message.channel.send(msg)
+
+    if message.content.startswith('!help'):
+        msg = '''
+echo - repeat what was typed
+hello - replies with 'hello <username>'
+help - provide some assistance with commands
+'''
         await message.channel.send(msg)
 
 @client.event
