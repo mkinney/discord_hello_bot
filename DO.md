@@ -1,6 +1,6 @@
 # Create smallest droplet Ubuntu 18 on [Digital Ocean](https://www.digitalocean.com/).
 
-# Run these commands: (note that *dbots* can be changed to most any other username)
+# Run these commands:
 
     apt-get update 
     apt-get -y upgrade
@@ -32,7 +32,17 @@
     cp discord_hello.service /etc/systemd/system/discord_hello.service
     systemctl daemon-reload
     systemctl start discord_hello.service
+    systemctl status discord_hello.service
+    tail -n 20 /var/log/syslog
     systemctl enable discord_hello.service
+
+# Create discord_fun.service (as root)
+
+    vi .env (and add the export DISCORD_FUN_TOKEN='xxx' line and 'export X_CMC_PRO_API_KEY=""' where that is your coin market cap pro api key)
+    cp discord_fun.service /etc/systemd/system/discord_fun.service
+    systemctl daemon-reload
+    systemctl start discord_fun.service
+    systemctl enable discord_fun.service
 
 # Updating (get updates)
     su - dbots
