@@ -23,6 +23,10 @@ but replace XXXX with your app client ID. Choose the server you want to add it t
     pip install discord.py
     pip freeze > requirements.txt
 
+then later:
+
+    pip install -r requirements.txt
+
 
 # Code the bot
 See hello.py
