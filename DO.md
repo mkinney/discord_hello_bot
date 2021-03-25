@@ -12,6 +12,7 @@
     vi .bashrc (and add 'source ./.env' to the end)
     git clone <thisrepo>
     cd discord_hello_bot
+    virtualenv -p python3 venv
     source venv/bin/activate
     pip install -r requirements.txt
    

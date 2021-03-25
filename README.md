@@ -16,7 +16,7 @@ Visit the URL
     
 but replace XXXX with your app client ID. Choose the server you want to add it to and select authorize.
 
-# Create python environemnt to run bot (first time)
+# Create python environment to run bot (first time)
 
     virtualenv -p python3 venv
     source venv/bin/activate

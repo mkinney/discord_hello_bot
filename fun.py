@@ -46,10 +46,9 @@ async def on_ready():
     print("Logged in as " + client.user.name)
 
 
-# Note: This requires an argument.
-# TODO: figure out how to default to some values.
+# Note: This requires an argument, but will default to some coins.
 @client.command(name='prices')
-async def prices(context, symbols):
+async def prices(context, symbols="btc,eth"):
     url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
     headers = { 'X-CMC_PRO_API_KEY': cmc_key }
     params = {'start': 1, 'limit': 1000, 'convert': 'USD'}
