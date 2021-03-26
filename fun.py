@@ -97,26 +97,31 @@ async def cg(context, symbol="bitcoin"):
     # allow for some short names
     if symbol in ("ETH", "eth", "Eth"):
         symbol = "ethereum"
+    if symbol in ("whirl"):
+        symbol = "whirl-finance"
     filename = 'cg.png'
     r = requests.get(API_URL + f"/coins/{symbol}/market_chart?vs_currency=usd&days=12")
     d = r.json()
 
-    df = pd.DataFrame(d['prices'], columns = ['dateTime', 'price'])
-    df['date'] = pd.to_datetime(df['dateTime'], unit='ms')
+    try:
+        df = pd.DataFrame(d['prices'], columns = ['dateTime', 'price'])
+        df['date'] = pd.to_datetime(df['dateTime'], unit='ms')
 
-    ohlcdf = df.set_index('date')['price'].resample('4h').ohlc()
-    mpf.plot(ohlcdf, type='candle', mav=(3,6,9),
-             title=f'\n{symbol} (Source: Coingecko)\nWith MAV(3,6,9)', ylabel='OHLC Candles',
-             datetime_format='%Y-%m-%d', xrotation=90,
-             savefig=filename)
+        ohlcdf = df.set_index('date')['price'].resample('4h').ohlc()
+        mpf.plot(ohlcdf, type='candle', mav=(3,6,9),
+                 title=f'\n{symbol} (Source: Coingecko)\nWith MAV(3,6,9)', ylabel='OHLC Candles',
+                 datetime_format='%Y-%m-%d', xrotation=90,
+                 savefig=filename)
 
-    # now send the file to Discord
-    file = File(filename)
-    e = Embed()
-    e.set_image(url=f"attachment://{filename}")
-    await context.channel.send(file = file, embed=e)
-    await asyncio.sleep(5)
-    os.remove(filename)
+        # now send the file to Discord
+        file = File(filename)
+        e = Embed()
+        e.set_image(url=f"attachment://{filename}")
+        await context.channel.send(file = file, embed=e)
+        await asyncio.sleep(5)
+        os.remove(filename)
+    except KeyError:
+        await context.channel.send(f'Warning: Symbol({symbol}) must not be valid. Try another.')
 
 
 @client.event
