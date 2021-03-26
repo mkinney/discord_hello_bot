@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
-# Work with Python 3.6
 import random
 import asyncio
 import aiohttp
 import json
 import os
-from discord import Game
+from discord import Embed, File, Game
 from discord.ext.commands import Bot
+import matplotlib.pyplot as plt
 
 BOT_PREFIX = ("!")
 
@@ -37,6 +37,34 @@ async def eight_ball(context):
 async def square(context, number: str):
     squared_value = int(number) * int(number)
     await context.channel.send(str(number) + " squared is " + str(squared_value))
+
+
+# show how to embed an image in Discord
+@client.command()
+async def showimage(context):
+    file = File("bitcoin.png")
+    e = Embed()
+    e.set_image(url="attachment://bitcoin.png")
+    await context.channel.send(file = file, embed=e)
+
+
+# show how to embed an image in Discord
+@client.command()
+async def samplegraph(context):
+    # generate a sample graph
+    data = [25., 5., 150., 100.]
+    x_values = range(len(data))
+    fig = plt.bar(x_values, data)
+    #plt.show()
+    plt.savefig('samplegraph.png')
+    plt.close()
+
+    # now send the file to Discord
+    file = File("samplegraph.png")
+    e = Embed()
+    e.set_image(url="attachment://samplegraph.png")
+    # TODO: how to remove the temp image after shared?
+    await context.channel.send(file = file, embed=e)
 
 
 @client.event

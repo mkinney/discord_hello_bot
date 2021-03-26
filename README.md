@@ -13,12 +13,14 @@ After creating app, on the app details page, scroll down to the section named bo
 Visit the URL
 
     https://discordapp.com/oauth2/authorize?client_id=XXXXXXXXXXXX&scope=bot
-    
+
 but replace XXXX with your app client ID. Choose the server you want to add it to and select authorize.
 
 # Create python environment to run bot (first time)
 
     virtualenv -p python3 venv
+    # or
+    python3 -m venv venv
     source venv/bin/activate
     pip install discord.py
     pip freeze > requirements.txt
