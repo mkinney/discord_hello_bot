@@ -5,6 +5,7 @@ import asyncio
 import aiohttp
 import json
 import os
+import requests
 from discord import Embed, File, Game
 from discord.ext.commands import Bot
 import matplotlib.pyplot as plt
@@ -83,6 +84,29 @@ async def samplefinance(context):
     e.set_image(url="attachment://samplefinance.png")
     # TODO: how to remove the temp image after shared?
     await context.channel.send(file = file, embed=e)
+
+
+# Plot data from coingecko
+# See https://stackoverflow.com/questions/66035927/how-to-make-a-pandas-timestamp-object-subscriptable
+@client.command(brief='Show graph from CoinGecko')
+async def samplecg(context):
+    API_URL = 'https://api.coingecko.com/api/v3'
+    r = requests.get(API_URL + '/coins/bitcoin/market_chart?vs_currency=usd&days=3&interval=hourly')
+    d = r.json()
+
+    df = pd.DataFrame(d['prices'], columns = ['dateTime', 'price'])
+    df['date'] = pd.to_datetime(df['dateTime'], unit='ms')
+
+    ohlcdf = df.set_index('date')['price'].resample('4h').ohlc()
+    mpf.plot(ohlcdf, type='candle', style='yahoo', savefig='samplecg.png')
+
+    # now send the file to Discord
+    file = File("samplecg.png")
+    e = Embed()
+    e.set_image(url="attachment://samplecg.png")
+    # TODO: how to remove the temp image after shared?
+    await context.channel.send(file = file, embed=e)
+
 
 @client.event
 async def on_ready():
