@@ -66,8 +66,9 @@ async def samplegraph(context):
     file = File("samplegraph.png")
     e = Embed()
     e.set_image(url="attachment://samplegraph.png")
-    # TODO: how to remove the temp image after shared?
     await context.channel.send(file = file, embed=e)
+    await asyncio.sleep(5)
+    os.remove('samplegraph.png')
 
 
 # Show how to plot a simple finance chart (candlesticks)
@@ -82,8 +83,9 @@ async def samplefinance(context):
     file = File("samplefinance.png")
     e = Embed()
     e.set_image(url="attachment://samplefinance.png")
-    # TODO: how to remove the temp image after shared?
     await context.channel.send(file = file, embed=e)
+    await asyncio.sleep(5)
+    os.remove('samplefinance.png')
 
 
 # Plot data from coingecko
@@ -104,8 +106,9 @@ async def samplecg(context):
     file = File("samplecg.png")
     e = Embed()
     e.set_image(url="attachment://samplecg.png")
-    # TODO: how to remove the temp image after shared?
     await context.channel.send(file = file, embed=e)
+    await asyncio.sleep(5)
+    os.remove('samplecg.png')
 
 
 @client.event
