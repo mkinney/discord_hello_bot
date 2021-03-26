@@ -5,6 +5,7 @@ import asyncio
 import aiohttp
 import json
 import os
+import re
 import requests
 from discord import Embed, File, Game
 from discord.ext.commands import Bot
@@ -122,6 +123,45 @@ async def cg(context, symbol="bitcoin"):
         os.remove(filename)
     except KeyError:
         await context.channel.send(f'Warning: Symbol({symbol}) must not be valid. Try another.')
+
+
+# default to Fox 0xFAd8E46123D7b4e77496491769C167FF894d2ACB
+@client.command(brief='Show number of holders for a contract',
+                description='There are some short names. (etna, fox, hac, kirby, paw, rcvr, safemoon, uprize, whirl)')
+async def holders(context, contract):
+
+    # make the interface a little easier
+    if contract in ("etna"):
+        contract = "0x51f35073ff7cf54c9e86b7042e59a8cc9709fc46"
+    if contract in ("fox"):
+        contract = "0xFAd8E46123D7b4e77496491769C167FF894d2ACB"
+    if contract in ("hac"):
+        contract = "0xff56f98b5ec157b0cb208a152fbdba215129db15"
+    if contract in ("kirby"):
+        contract = "0x23b360e387d9e4d2646609861e68adc621a3af82"
+    if contract in ("paw"):
+        contract = "0x1CAA1e68802594EF24111ff0D10Eca592A2B5c58"
+    if contract in ("rcvr"):
+        contract = "0x26d4552879cdcc32599e2ff1c1e2a438d5c5323e"
+    if contract in ("safemoon"):
+        contract = "0x8076c74c5e3f5852037f31ff0093eeb8c8add8d3"
+    if contract in ("uprize"):
+        contract = "0xbbab7de13326baa537fc9d329cbc70879c1578ee"
+    if contract in ("whirl"):
+        contract = "0x7f479d78380ad00341fdd7322fe8aef766e29e5a"
+
+    if contract != '':
+        url = f'https://bscscan.com/token/{contract}'
+        page = requests.get(url)
+        # Use regular expressions to find string in the html.
+        # "I have a problem. I know! I'll use regular expressions.
+        # Now I have two problems."
+        p = re.compile(r'.* number of holders ([0-9,]+) ', re.DOTALL)
+        m = p.match(page.text)
+        holders = m.group(1)
+        await context.channel.send(f'number of holders:{holders}')
+    else:
+        await context.channel.send(f'Warning: Could not determine number of holders.')
 
 
 @client.event
