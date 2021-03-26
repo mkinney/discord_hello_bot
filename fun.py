@@ -35,14 +35,14 @@ async def eight_ball(context):
     await context.channel.send(random.choice(possible_responses) + ", " + context.message.author.mention)
 
 
-@client.command()
+@client.command(brief='Sample parsing of arguments')
 async def square(context, number: str):
     squared_value = int(number) * int(number)
     await context.channel.send(str(number) + " squared is " + str(squared_value))
 
 
 # show how to embed an image in Discord
-@client.command()
+@client.command(brief='Show how to embed an image')
 async def showimage(context):
     file = File("bitcoin.png")
     e = Embed()
@@ -50,8 +50,8 @@ async def showimage(context):
     await context.channel.send(file = file, embed=e)
 
 
-# show how to embed an image in Discord
-@client.command()
+# show how to generate and embed an image in Discord
+@client.command(brief='Show how to generate a graph then embed the image')
 async def samplegraph(context):
     # generate a sample graph
     data = [25., 5., 150., 100.]
@@ -71,7 +71,7 @@ async def samplegraph(context):
 
 # Show how to plot a simple finance chart (candlesticks)
 # Note: See https://github.com/matplotlib/mplfinance/blob/master/examples/savefig.ipynb
-@client.command()
+@client.command(brief='Show how to generate a financial chart (candlesticks)')
 async def samplefinance(context):
     # Extracting Data for plotting
     df = pd.read_csv('SP500_NOV2019_Hist.csv', index_col=0, parse_dates=True)
@@ -92,7 +92,7 @@ async def on_ready():
 
 
 # Note: This requires an argument, but will default to some coins.
-@client.command(name='prices')
+@client.command(name='prices', brief='Show Coinmarketcap prices from list (ex: "btc,eth")')
 async def prices(context, symbols="btc,eth"):
     url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
     headers = { 'X-CMC_PRO_API_KEY': cmc_key }
