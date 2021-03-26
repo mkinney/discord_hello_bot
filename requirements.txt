@@ -18,3 +18,5 @@ websockets==8.1
 yarl==1.6.3
 zipp==3.4.1
 matplotlib
+pandas
+mplfinance

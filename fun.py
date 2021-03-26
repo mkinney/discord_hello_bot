@@ -8,6 +8,8 @@ import os
 from discord import Embed, File, Game
 from discord.ext.commands import Bot
 import matplotlib.pyplot as plt
+import mplfinance as mpf
+import pandas as pd
 
 BOT_PREFIX = ("!")
 
@@ -66,6 +68,21 @@ async def samplegraph(context):
     # TODO: how to remove the temp image after shared?
     await context.channel.send(file = file, embed=e)
 
+
+# Show how to plot a simple finance chart (candlesticks)
+# Note: See https://github.com/matplotlib/mplfinance/blob/master/examples/savefig.ipynb
+@client.command()
+async def samplefinance(context):
+    # Extracting Data for plotting
+    df = pd.read_csv('SP500_NOV2019_Hist.csv', index_col=0, parse_dates=True)
+    mpf.plot(df, type='candle', volume=True, savefig='samplefinance.png')
+
+    # now send the file to Discord
+    file = File("samplefinance.png")
+    e = Embed()
+    e.set_image(url="attachment://samplefinance.png")
+    # TODO: how to remove the temp image after shared?
+    await context.channel.send(file = file, embed=e)
 
 @client.event
 async def on_ready():
