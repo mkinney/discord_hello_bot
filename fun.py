@@ -101,17 +101,19 @@ async def cg(context, symbol="bitcoin"):
     if symbol in ("whirl"):
         symbol = "whirl-finance"
     filename = 'cg.png'
-    r = requests.get(API_URL + f"/coins/{symbol}/market_chart?vs_currency=usd&days=12")
+    r = requests.get(API_URL + f"/coins/{symbol}/market_chart?vs_currency=usd&days=90")
     d = r.json()
 
     try:
         df = pd.DataFrame(d['prices'], columns = ['dateTime', 'price'])
         df['date'] = pd.to_datetime(df['dateTime'], unit='ms')
 
-        ohlcdf = df.set_index('date')['price'].resample('4h').ohlc()
-        mpf.plot(ohlcdf, type='candle', mav=(3,6,9),
-                 title=f'\n{symbol} (Source: Coingecko)\nWith MAV(3,6,9)', ylabel='OHLC Candles',
-                 datetime_format='%Y-%m-%d', xrotation=90,
+        ohlcdf = df.set_index('date')['price'].resample('1d').ohlc()
+        mpf.plot(ohlcdf, type='candle', mav=(21, 50),
+                 tight_layout=True,
+                 title=f'Coingecko:{symbol} 1H MAV(Blue=21,Orange=50)',
+                 style='yahoo', figscale=2.0,
+                 datetime_format='%m-%d', xrotation=90,
                  savefig=filename)
 
         # now send the file to Discord
