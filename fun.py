@@ -95,15 +95,23 @@ async def samplefinance(context):
                 description='Can specify any coin at CoinGecko. (ex: "ethereum")')
 async def cg(context, symbol="bitcoin"):
     API_URL = 'https://api.coingecko.com/api/v3'
+
+    # lower case all symbols
+    symbol = symbol.lower()
+
     # allow for some short names
-    if symbol in ("ETH", "eth", "Eth"):
+    if symbol in ("eth"):
         symbol = "ethereum"
+    if symbol in ("btc"):
+        symbol = "bitcoin"
     if symbol in ("whirl"):
         symbol = "whirl-finance"
+
     filename = 'cg.png'
     r = requests.get(API_URL + f"/coins/{symbol}/market_chart?vs_currency=usd&days=90")
     d = r.json()
 
+    found = False
     try:
         df = pd.DataFrame(d['prices'], columns = ['dateTime', 'price'])
         df['date'] = pd.to_datetime(df['dateTime'], unit='ms')
@@ -123,8 +131,15 @@ async def cg(context, symbol="bitcoin"):
         await context.channel.send(file = file, embed=e)
         await asyncio.sleep(5)
         os.remove(filename)
+        found = True
     except KeyError:
         await context.channel.send(f'Warning: Symbol({symbol}) must not be valid. Try another.')
+    if not found:
+        r = requests.get(API_URL + "/coins/list?include_platform=true")
+        d = r.json()
+        for data in d:
+            if symbol in (data["symbol"], data["name"]):
+                await context.channel.send(f'Might try using ({data["id"]})')
 
 
 # default to Fox 0xFAd8E46123D7b4e77496491769C167FF894d2ACB
