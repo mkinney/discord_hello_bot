@@ -142,6 +142,52 @@ async def cg(context, symbol="bitcoin"):
                 await context.channel.send(f'Might try using ({data["id"]})')
 
 
+# persist the list to local file
+@client.command(brief='Update contracts for DevGuru',
+                description='Update the list of BEP20 contracts from CoinGecko')
+async def cgu(context):
+    API_URL = 'https://api.coingecko.com/api/v3'
+    r = requests.get(API_URL + "/coins/list?include_platform=true")
+    d = r.json()
+    with open('cgu.txt', 'w') as outfile:
+        json.dump(d, outfile)
+    await context.channel.send(f'Updated list')
+
+
+# use local file instead of doing a web call everytime
+@client.command(brief='Show info about contracts from local file',
+                description='Show info from CoinGecko. To update the local file run "cgu"')
+async def cgi(context, symbol):
+    with open('cgu.txt') as json_file:
+        data = json.load(json_file)
+    found = False
+    for d in data:
+        if symbol in [ d['id'], d['symbol'], d['name'] ]:
+            found = True
+            await context.channel.send(f'Found: {d}')
+    if not found:
+        await context.channel.send(f'Could not find symbol({symbol})')
+
+
+# use local file instead of doing a web call everytime
+@client.command(brief='Show DevGuru link for binance smart chain contract',
+                description='Show info from DevGuru using local list from CoinGecko. To update the local file run "cgu"')
+async def dg(context, symbol):
+    with open('cgu.txt') as json_file:
+        data = json.load(json_file)
+    found = False
+    for d in data:
+        if symbol in [ d['id'], d['symbol'], d['name'] ]:
+            found = True
+            bc = d["platforms"]["binance-smart-chain"]
+            if bc:
+                await context.channel.send(f'https://dex.guru/token/{bc}-bsc')
+            else:
+                await context.channel.send(f'Could not find the binance smart chain contract.')
+    if not found:
+        await context.channel.send(f'Could not find symbol({symbol})')
+
+
 # default to Fox 0xFAd8E46123D7b4e77496491769C167FF894d2ACB
 @client.command(brief='Show number of holders for a contract',
                 description='There are some short names. (etna, fox, hac, kirby, paw, rcvr, safemoon, uprize, whirl)')
