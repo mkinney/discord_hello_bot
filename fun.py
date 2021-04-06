@@ -170,7 +170,7 @@ async def cgi(context, symbol):
 
 
 # use local file instead of doing a web call everytime
-@client.command(brief='Show DevGuru link for binance smart chain contract',
+@client.command(brief='Show DevGuru link',
                 description='Show info from DevGuru using local list from CoinGecko. To update the local file run "cgu"')
 async def dg(context, symbol):
     with open('cgu.txt') as json_file:
@@ -179,11 +179,23 @@ async def dg(context, symbol):
     for d in data:
         if symbol in [ d['id'], d['symbol'], d['name'] ]:
             found = True
-            bc = d["platforms"]["binance-smart-chain"]
-            if bc:
-                await context.channel.send(f'https://dex.guru/token/{bc}-bsc')
-            else:
-                await context.channel.send(f'Could not find the binance smart chain contract.')
+            foundBC = False
+            try:
+                bc = d["platforms"]["binance-smart-chain"]
+                foundBC = True
+                if bc:
+                    await context.channel.send(f'https://dex.guru/token/{bc}-bsc')
+            except:
+                pass
+            # not binance, try ETH
+            if not foundBC:
+                try:
+                    bc = d["platforms"]["ethereum"]
+                    foundBC = True
+                    if bc:
+                        await context.channel.send(f'https://dex.guru/token/{bc}-eth')
+                except:
+                    pass
     if not found:
         await context.channel.send(f'Could not find symbol({symbol})')
 
