@@ -3,6 +3,7 @@
 import random
 import asyncio
 import aiohttp
+import subprocess
 import json
 import os
 import re
@@ -50,6 +51,19 @@ async def showimage(context):
     e = Embed()
     e.set_image(url="attachment://bitcoin.png")
     await context.channel.send(file = file, embed=e)
+
+
+# show how to run a command and send output to discord (ex: "fortune")
+# Might need to run "sudo apt install fortune" (or "brew install fortune")
+@client.command(brief='Run the "fortune" command')
+async def fortune(context):
+    output = subprocess.getoutput("fortune")
+    await context.channel.send(output)
+    # for fun, sleep for 2 seconds then remove user's bot request
+    # Note: This assumes the bot has appropriate permssions
+    message = context.message
+    await asyncio.sleep(2)
+    await message.delete()
 
 
 # show how to generate and embed an image in Discord
