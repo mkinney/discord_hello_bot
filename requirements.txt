@@ -13,7 +13,7 @@ pluggy==0.13.1
 python-jsonrpc-server==0.4.0
 python-language-server==0.35.1
 typing-extensions==3.7.4.3
-ujson==4.0.2
+ujson==5.2.0
 websockets==8.1
 yarl==1.6.3
 zipp==3.4.1
